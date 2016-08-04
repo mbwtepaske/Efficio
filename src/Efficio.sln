@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Efficio.VisualStudio", "Efficio.VisualStudio\Efficio.VisualStudio.csproj", "{E14AC04F-57EE-41A4-9BEC-9F7974F650F5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Efficio", "Efficio\Efficio.csproj", "{ED871E9C-32B5-41C3-AC17-B4A34FD9CB55}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{E14AC04F-57EE-41A4-9BEC-9F7974F650F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E14AC04F-57EE-41A4-9BEC-9F7974F650F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E14AC04F-57EE-41A4-9BEC-9F7974F650F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED871E9C-32B5-41C3-AC17-B4A34FD9CB55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED871E9C-32B5-41C3-AC17-B4A34FD9CB55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED871E9C-32B5-41C3-AC17-B4A34FD9CB55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED871E9C-32B5-41C3-AC17-B4A34FD9CB55}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
