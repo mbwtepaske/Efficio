@@ -4,10 +4,10 @@ using Microsoft.VisualStudio.Shell;
 namespace Efficio
 {
   [CodeGeneratorRegistration(typeof(CustomTool), Description, VSConstants.UICONTEXT.CSharpProject_string, GeneratesDesignTimeSource = true)]
-  internal sealed class CustomTool : BaseCodeGeneratorWithSite
+  public sealed class CustomTool : BaseCodeGeneratorWithSite
   {
-    internal const string Name = "Efficio";
     internal const string Description = "Efficio Generator";
+    internal const string Name = "Efficio";
     
     protected override byte[] GenerateCode(string content)
     {

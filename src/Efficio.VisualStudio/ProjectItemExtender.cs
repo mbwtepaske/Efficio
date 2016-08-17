@@ -13,8 +13,6 @@ using EnvDTE;
 
 using IExtenderProvider = EnvDTE.IExtenderProvider;
 
-using VSLangProj;
-
 namespace Efficio
 {
   /// <summary>
@@ -25,32 +23,31 @@ namespace Efficio
   {
     private class Provider : IExtenderProvider
     {
-      private readonly string _categoryID;
+      private readonly string _category;
       private readonly IServiceProvider _serviceProvider;
 
-      public Provider(IServiceProvider serviceProvider, string categoryID)
+      public Provider(IServiceProvider serviceProvider, string category)
       {
-        _categoryID = categoryID;
+        _category = category;
         _serviceProvider = serviceProvider;
       }
 
-      public bool CanExtend(string categoryID, string extenderName, object extendee) => categoryID == _categoryID && extenderName == EfficioPackage.Name;
+      public bool CanExtend(string category, string extenderName, object extendee) => category == _category && extenderName == EfficioPackage.Name;
 
       public object GetExtender(string categoryID, string name, object extendee, IExtenderSite extenderSite, int cookie) 
         => new ProjectItemExtender(_serviceProvider, (IVsBrowseObject) extendee, extenderSite, cookie);
     }
 
-    public static IDisposable Register(IServiceProvider serviceProvider, string categoryID)
+    public static IDisposable Register(IServiceProvider serviceProvider, string category)
     {
       var cookie = serviceProvider
         .GetService<ObjectExtenders>()
-        .RegisterExtenderProvider(categoryID, EfficioPackage.Name, new Provider(serviceProvider, categoryID));
+        .RegisterExtenderProvider(category, EfficioPackage.Name, new Provider(serviceProvider, category));
 
       return Disposable.Create(() => serviceProvider.GetService<ObjectExtenders>().UnregisterExtenderProvider(cookie));
     }
 
     private readonly int _cookie;
-    private readonly IVsHierarchy _project;
     private readonly ProjectItem _projectItem;
     private readonly uint _projectItemID;
     private readonly IVsBuildPropertyStorage _propertyStorage;
@@ -117,14 +114,15 @@ namespace Efficio
         throw new ArgumentNullException(nameof(site));
       }
 
+      var project = default(IVsHierarchy);
       var projectItemObject = default(object);
 
-      ErrorHandler.ThrowOnFailure(browseObject.GetProjectItem(out _project, out _projectItemID));
-      ErrorHandler.ThrowOnFailure(_project.GetProperty(_projectItemID, (int)__VSHPROPID.VSHPROPID_ExtObject, out projectItemObject));
+      ErrorHandler.ThrowOnFailure(browseObject.GetProjectItem(out project, out _projectItemID));
+      ErrorHandler.ThrowOnFailure(project.GetProperty(_projectItemID, (int)__VSHPROPID.VSHPROPID_ExtObject, out projectItemObject));
 
       _cookie = cookie;
       _projectItem = (ProjectItem) projectItemObject;
-      _propertyStorage = (IVsBuildPropertyStorage) _project;
+      _propertyStorage = (IVsBuildPropertyStorage) project;
       _site = site;
     }
 
@@ -134,7 +132,7 @@ namespace Efficio
       {
         _site.NotifyDelete(_cookie);
       }
-      catch (InvalidOperationException)
+      catch (InvalidComObjectException)
       {
       }
     }

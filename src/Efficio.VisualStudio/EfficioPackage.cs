@@ -21,10 +21,10 @@ namespace Efficio
 
   // Ensure VS experimental hive can find the extension library.
   [ProvideBindingPath]
-  internal sealed class EfficioPackage : Package
+  public sealed class EfficioPackage : Package
   {
-    public const string Description = "The Efficio extension extends C# and VB.NET project items with addition properties and a new custom tool '" + Name + "'.";
-    public const string Name = "Efficio";
+    public const string Description = "The EfficioPackage extension extends C# and VB.NET project items with addition properties and a new custom tool '" + Name + "'.";
+    public const string Name = "EfficioPackage";
 
     private readonly Stack<IDisposable> _extenders = new Stack<IDisposable>();
 

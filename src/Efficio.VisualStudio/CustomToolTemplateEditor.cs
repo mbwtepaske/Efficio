@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.Win32;
@@ -21,12 +22,10 @@ namespace Efficio
     /// </summary>
     public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
     {
-      var templateFullPath = (string) value;//GetFullTemplatePath(context, );
-
       var dialog = new OpenFileDialog
       {
-        InitialDirectory = Path.GetDirectoryName(templateFullPath),
-        FileName = Path.GetFileName(templateFullPath),
+        InitialDirectory = Path.GetDirectoryName(ProjectHelpers.GetProject().FullName),
+        //FileName = Path.GetFileName(templateFullPath),
         Filter = "C# Scripts (*.csx)|*.csx|VB Scripts (*.vbx)|*.vbx|All Files (*.*)|*.*",
         Title = "Select Custom Tool Template"
       };

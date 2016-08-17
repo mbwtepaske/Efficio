@@ -30,8 +30,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Efficio\Efficio.csproj">
+      <Project>{ed871e9c-32b5-41c3-ac17-b4a34fd9cb55}</Project>
+      <Name>Efficio</Name>
+    </ProjectReference>
     <Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="envdte80, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.Designer.Interfaces, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -89,21 +96,68 @@
     <Compile Include="CustomTool.cs" />
     <Compile Include="CustomToolTemplateEditor.cs" />
     <Compile Include="EfficioPackage.cs" />
-    <Compile Include="Extensions\IServiceProviderExtensions.cs" />
+    <Compile Include="Extensions\ObjectExtensions.cs" />
+    <Compile Include="Extensions\ServiceProviderExtensions.cs" />
+    <Compile Include="ProjectHelper.cs" />
     <Compile Include="ProjectItemExtender.cs" />
     <Compile Include="ProjectItemMetadata.cs" />
     <Compile Include="ProjectItemProperty.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
+  <!-- VSIX -->
+  <PropertyGroup>
+    <VsSdkTargets>$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\VSSDK\Microsoft.VsSDK.targets</VsSdkTargets>
+  </PropertyGroup>
+  <Choose>
+    <When Condition="Exists($(VsSdkTargets))">
+      <PropertyGroup>
+        <CopyBuildOutputToOutputDirectory>true</CopyBuildOutputToOutputDirectory>
+        <CopyOutputSymbolsToOutputDirectory>true</CopyOutputSymbolsToOutputDirectory>
+        <GeneratePkgDefFile>true</GeneratePkgDefFile>
+        <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
+        <IncludeDebugSymbolsInVSIXContainer>true</IncludeDebugSymbolsInVSIXContainer>
+        <IncludeDebugSymbolsInLocalVSIXDeployment>true</IncludeDebugSymbolsInLocalVSIXDeployment>
+        <RegisterOutputPackage>true</RegisterOutputPackage>
+        <RegisterWithCodebase>true</RegisterWithCodebase>
+        <StartAction>Program</StartAction>
+        <StartProgram>$(MSBuildProgramFiles32)\Microsoft Visual Studio $(VisualStudioVersion)\Common7\IDE\devenv.exe</StartProgram>
+        <StartArguments>"C:\Projects\EfficioTest\EfficioTest.sln" /rootsuffix Exp /log</StartArguments>
+      </PropertyGroup>
+      <ItemGroup>
+        <None Include="source.extension.vsixmanifest" />
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Import Condition="Exists($(VsSdkTargets))" Project="$(VsSdkTargets)" />
+  <Target Name="AfterBuild" Condition="Exists($(VsSdkTargets))">
+    <PropertyGroup>
+      <Publisher>Community</Publisher>
+      <RootSuffix>Exp</RootSuffix>
+      <VSIXOutputPath>$(AppData)\..\Local\Microsoft\VisualStudio\$(VisualStudioVersion)$(RootSuffix)\Extensions\$(Publisher)\$(RootNamespace)\$(VisualStudioVersion)</VSIXOutputPath>
+    </PropertyGroup>
+    <ItemGroup>
+      <ProjectOutput Include="$(OutputPath)\$(TargetName).*" />
+    </ItemGroup>
+    <Copy Condition="Exists($(VSIXOutputPath))" SourceFiles="@(ProjectOutput)" DestinationFolder="$(VSIXOutputPath)" />
+    <Message Importance="High" Text="$(VSIXOutputPath)" />
   </Target>
+  <!-- 
+  <Target Name="InstallPlugin" DependsOnTargets="Build">
+    <Copy SkipUnchangedFiles="true" ContinueOnError="true" SourceFiles="$(OutputPath)source.extension.vsixmanifest" DestinationFiles="$(DevEnvDir)\Extensions\$(AssemblyName)\extension.vsixmanifest" />
+  </Target> 
+  
   <Target Name="AfterBuild">
-  </Target>
-  -->
+    <Message Text="MsBuildProjectDirectory = '$(MsBuildProjectDirectory)'" />
+    <PropertyGroup>
+      <VsixOut>$(MsBuildProjectDirectory)\..\artifacts</VsixOut>
+    </PropertyGroup>
+    <ItemGroup>
+      <FilesToCopy Include="$(OutputPath)\*.vsix" />
+    </ItemGroup>
+    <MakeDir Condition=" !Exists('$(VsixOut)') " Directories="$(VsixOut)" />
+    <Error Condition="!Exists($(VsSdkTargets))" Text="$(VsSdkTargets) could not be found. A VSIX cannot be built." />
+  </Target>  
+   -->
 </Project>
