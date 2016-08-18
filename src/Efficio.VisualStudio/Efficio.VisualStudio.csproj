@@ -94,11 +94,14 @@
     <Compile Include="BaseCodeGeneratorWithSite.cs" />
     <Compile Include="CodeGeneratorRegistrationAttribute.cs" />
     <Compile Include="CustomTool.cs" />
+    <Compile Include="CustomToolParameter.cs" />
+    <Compile Include="CustomToolParameters.cs" />
     <Compile Include="CustomToolTemplateEditor.cs" />
     <Compile Include="EfficioPackage.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\ServiceProviderExtensions.cs" />
-    <Compile Include="ProjectHelper.cs" />
+    <Compile Include="Helper.cs" />
+    <Compile Include="ProjectItemExtender.Provider.cs" />
     <Compile Include="ProjectItemExtender.cs" />
     <Compile Include="ProjectItemMetadata.cs" />
     <Compile Include="ProjectItemProperty.cs" />

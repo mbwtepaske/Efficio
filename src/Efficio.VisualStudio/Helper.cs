@@ -87,16 +87,19 @@ namespace Efficio
       var selectionContainerPointer = IntPtr.Zero;
       var multiItemSelection = default(IVsMultiItemSelect);
 
-      ServiceProvider.GlobalProvider.GetService<SVsShellMonitorSelection, IVsMonitorSelection>().GetCurrentSelection(out hierarchyPointer, out projectItemId, out multiItemSelection, out selectionContainerPointer);
+      ServiceProvider
+        .GlobalProvider
+        .GetService<SVsShellMonitorSelection, IVsMonitorSelection>()
+        .GetCurrentSelection(out hierarchyPointer, out projectItemId, out multiItemSelection, out selectionContainerPointer);
 
       return Marshal.GetTypedObjectForIUnknown(hierarchyPointer, typeof(IVsHierarchy)) as IVsHierarchy;
     }
 
-    public static DTE2 GetDte2() => (DTE2) ServiceProvider.GlobalProvider.GetService<DTE>();
+    public static DTE2 GetDTE2() => (DTE2) ServiceProvider.GlobalProvider.GetService<DTE>();
 
     public static string GetSourceFilePath()
     {
-      foreach (UIHierarchyItem selectionItem in GetDte2().ToolWindows.SolutionExplorer.SelectedItems.SafeCast<Array>() ?? Array.Empty<UIHierarchyItem>())
+      foreach (UIHierarchyItem selectionItem in GetDTE2().ToolWindows.SolutionExplorer.SelectedItems.SafeCast<Array>() ?? Array.Empty<UIHierarchyItem>())
       {
         return selectionItem.Object.SafeCast<ProjectItem>()?.Properties.Item("FullPath").Value.ToString() ?? string.Empty;
       }

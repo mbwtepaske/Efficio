@@ -11,42 +11,14 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 using EnvDTE;
 
-using IExtenderProvider = EnvDTE.IExtenderProvider;
-
 namespace Efficio
 {
   /// <summary>
   /// Adds "Custom Tool Template" and "Custom Tool Parameters" properties to the C# and VB.NET project item properties.
   /// </summary>
   [ComVisible(true)]
-  public class ProjectItemExtender
+  public partial class ProjectItemExtender
   {
-    private class Provider : IExtenderProvider
-    {
-      private readonly string _category;
-      private readonly IServiceProvider _serviceProvider;
-
-      public Provider(IServiceProvider serviceProvider, string category)
-      {
-        _category = category;
-        _serviceProvider = serviceProvider;
-      }
-
-      public bool CanExtend(string category, string extenderName, object extendee) => category == _category && extenderName == EfficioPackage.Name;
-
-      public object GetExtender(string categoryID, string name, object extendee, IExtenderSite extenderSite, int cookie) 
-        => new ProjectItemExtender(_serviceProvider, (IVsBrowseObject) extendee, extenderSite, cookie);
-    }
-
-    public static IDisposable Register(IServiceProvider serviceProvider, string category)
-    {
-      var cookie = serviceProvider
-        .GetService<ObjectExtenders>()
-        .RegisterExtenderProvider(category, EfficioPackage.Name, new Provider(serviceProvider, category));
-
-      return Disposable.Create(() => serviceProvider.GetService<ObjectExtenders>().UnregisterExtenderProvider(cookie));
-    }
-
     private readonly int _cookie;
     private readonly ProjectItem _projectItem;
     private readonly uint _projectItemID;
@@ -57,8 +29,8 @@ namespace Efficio
     /// Gets or sets the file extenderName of the template used by the <see cref="CustomTool"/>.
     /// </summary>
     [Category(EfficioPackage.Name)]
-    [DisplayName("Custom Tool " + ProjectItemMetadata.Template)]
-    [Description("A template used by the " + CustomTool.Name + " to generate code from this file.")]
+    [DisplayName(CustomTool.Name + " " + ProjectItemMetadata.Template)]
+    [Description("A template used by the " + CustomTool.Name + "(Custom Tool) to generate code from this file.")]
     [Editor(typeof(CustomToolTemplateEditor), typeof(UITypeEditor))]
     public string CustomToolTemplate
     {
@@ -96,7 +68,21 @@ namespace Efficio
         }
       }
     }
-    
+
+    [Category(EfficioPackage.Name)]
+    [DisplayName(CustomTool.Name + " " + ProjectItemMetadata.References)]
+    [Description("References used by the " + CustomTool.Name + "(Custom Tool) to execute code.")]
+    public string[] References
+    {
+      get
+      {
+        return Array.Empty<string>();
+      }
+      set
+      {
+      }
+    }
+
     internal ProjectItemExtender(IServiceProvider serviceProvider, IVsBrowseObject browseObject, IExtenderSite site, int cookie)
     {
       if (serviceProvider == null)

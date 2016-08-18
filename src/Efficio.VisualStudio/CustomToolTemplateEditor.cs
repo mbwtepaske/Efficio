@@ -24,7 +24,7 @@ namespace Efficio
     {
       var dialog = new OpenFileDialog
       {
-        InitialDirectory = Path.GetDirectoryName(ProjectHelpers.GetProject().FullName),
+        InitialDirectory = Path.GetDirectoryName(Helper.GetProject().FullName),
         //FileName = Path.GetFileName(templateFullPath),
         Filter = "C# Scripts (*.csx)|*.csx|VB Scripts (*.vbx)|*.vbx|All Files (*.*)|*.*",
         Title = "Select Custom Tool Template"
