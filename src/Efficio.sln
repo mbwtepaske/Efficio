@@ -7,6 +7,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Efficio.VisualStudio", "Eff
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Efficio", "Efficio\Efficio.csproj", "{ED871E9C-32B5-41C3-AC17-B4A34FD9CB55}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Root", "Root", "{59CAAE11-CDB4-4237-9899-259D76ABC157}"
+	ProjectSection(SolutionItems) = preProject
+		..\LICENSE = ..\LICENSE
+		..\README.markdown = ..\README.markdown
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".git", ".git", "{2A77D9BA-7DF8-47A6-9F4A-FF5D8878F63B}"
+	ProjectSection(SolutionItems) = preProject
+		..\.gitattributes = ..\.gitattributes
+		..\.gitignore = ..\.gitignore
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

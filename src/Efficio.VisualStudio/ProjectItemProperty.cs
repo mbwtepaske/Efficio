@@ -26,9 +26,9 @@ namespace Efficio
     public const string CustomToolParameters = EfficioPackage.Name + ".CustomToolParameters";
 
     /// <summary>
-    /// Internal name of the "Custom Tool Template" project item property provided by the T4 Toolbox.
+    /// Internal name of the "Custom Tool Script" project item property provided by the T4 Toolbox.
     /// </summary>
-    public const string CustomToolTemplate = EfficioPackage.Name + ".CustomToolTemplate";
+    public const string CustomToolTemplate = EfficioPackage.Name + ".Script";
 
     /// <summary>
     /// Internal name of the "Build Action" project item property.

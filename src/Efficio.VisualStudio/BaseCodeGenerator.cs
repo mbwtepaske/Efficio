@@ -82,7 +82,7 @@ namespace Efficio
     } = string.Empty;
 
     /// <summary>
-    /// File-path for the input file
+    /// File path of the input file
     /// </summary>
     protected string FilePath
     {

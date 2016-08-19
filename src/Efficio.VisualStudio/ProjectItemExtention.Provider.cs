@@ -11,9 +11,9 @@ using IExtenderProvider = EnvDTE.IExtenderProvider;
 namespace Efficio
 {
   /// <summary>
-  /// Adds "Custom Tool Template" and "Custom Tool Parameters" properties to the C# and VB.NET project item properties.
+  /// Adds "Custom Tool Script" and "Custom Tool Parameters" properties to the C# and VB.NET project item properties.
   /// </summary>
-  public partial class ProjectItemExtender
+  public partial class ProjectItemExtention
   {
     private class Provider : IExtenderProvider
     {
@@ -30,7 +30,7 @@ namespace Efficio
         => category == _category && extenderName == EfficioPackage.Name;
 
       public object GetExtender(string categoryID, string name, object extendee, IExtenderSite extenderSite, int cookie) 
-        => new ProjectItemExtender(_serviceProvider, (IVsBrowseObject) extendee, extenderSite, cookie);
+        => new ProjectItemExtention(_serviceProvider, (IVsBrowseObject) extendee, extenderSite, cookie);
     }
 
     public static IDisposable Register(IServiceProvider serviceProvider, string category)

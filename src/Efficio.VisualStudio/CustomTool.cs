@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio;
+﻿using System.IO;
+
+using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 
 namespace Efficio
@@ -11,6 +13,21 @@ namespace Efficio
     
     protected override byte[] GenerateCode(string content)
     {
+      var projectItemExtender = GetProjectItem().Extender[EfficioPackage.Name] as ProjectItemExtention;
+
+      if (projectItemExtender != null)
+      {
+        var scriptFile = projectItemExtender.Script;
+
+        if (File.Exists(scriptFile))
+        {
+          var scriptCode = File.ReadAllText(scriptFile);
+          var scriptResult = Script<string>.EvaluateAsync(scriptCode, scriptFile, content).Result;
+          
+          
+        }
+      }
+
       return null;
     }
 

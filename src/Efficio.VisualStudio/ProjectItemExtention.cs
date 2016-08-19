@@ -14,10 +14,10 @@ using EnvDTE;
 namespace Efficio
 {
   /// <summary>
-  /// Adds "Custom Tool Template" and "Custom Tool Parameters" properties to the C# and VB.NET project item properties.
+  /// Adds "Custom Tool Script" and "Custom Tool Parameters" properties to the C# and VB.NET project item properties.
   /// </summary>
   [ComVisible(true)]
-  public partial class ProjectItemExtender
+  public partial class ProjectItemExtention
   {
     private readonly int _cookie;
     private readonly ProjectItem _projectItem;
@@ -29,16 +29,16 @@ namespace Efficio
     /// Gets or sets the file extenderName of the template used by the <see cref="CustomTool"/>.
     /// </summary>
     [Category(EfficioPackage.Name)]
-    [DisplayName(CustomTool.Name + " " + ProjectItemMetadata.Template)]
-    [Description("A template used by the " + CustomTool.Name + "(Custom Tool) to generate code from this file.")]
-    [Editor(typeof(CustomToolTemplateEditor), typeof(UITypeEditor))]
-    public string CustomToolTemplate
+    [DisplayName(CustomTool.Name + " " + ProjectItemMetadata.Script)]
+    [Description("An optional C# Script is executed by the " + CustomTool.Name + "(Custom Tool) instead of the input-file itself.")]
+    [Editor(typeof(ScriptFileNameEditor), typeof(UITypeEditor))]
+    public string Script
     {
       get
       {
         var value = default(string);
 
-        if (ErrorHandler.Failed(_propertyStorage.GetItemAttribute(_projectItemID, ProjectItemMetadata.Template, out value)))
+        if (ErrorHandler.Failed(_propertyStorage.GetItemAttribute(_projectItemID, ProjectItemMetadata.Script, out value)))
         {
           value = string.Empty;
         }
@@ -59,7 +59,7 @@ namespace Efficio
           }
         }
 
-        ErrorHandler.ThrowOnFailure(_propertyStorage.SetItemAttribute(_projectItemID, ProjectItemMetadata.Template, value));
+        ErrorHandler.ThrowOnFailure(_propertyStorage.SetItemAttribute(_projectItemID, ProjectItemMetadata.Script, value));
 
         // If the file does not have a custom tool yet, assume that by specifying the template user wants to use the T4Toolbox.TemplatedFileGenerator.
         if (!string.IsNullOrWhiteSpace(value) && string.IsNullOrWhiteSpace(customToolValue))
@@ -69,21 +69,21 @@ namespace Efficio
       }
     }
 
-    [Category(EfficioPackage.Name)]
-    [DisplayName(CustomTool.Name + " " + ProjectItemMetadata.References)]
-    [Description("References used by the " + CustomTool.Name + "(Custom Tool) to execute code.")]
-    public string[] References
-    {
-      get
-      {
-        return Array.Empty<string>();
-      }
-      set
-      {
-      }
-    }
+    //[Category(EfficioPackage.Name)]
+    //[DisplayName(CustomTool.Name + " " + ProjectItemMetadata.References)]
+    //[Description("References used by the " + CustomTool.Name + "(Custom Tool) to execute code.")]
+    //public string[] References
+    //{
+    //  get
+    //  {
+    //    return Array.Empty<string>();
+    //  }
+    //  set
+    //  {
+    //  }
+    //}
 
-    internal ProjectItemExtender(IServiceProvider serviceProvider, IVsBrowseObject browseObject, IExtenderSite site, int cookie)
+    internal ProjectItemExtention(IServiceProvider serviceProvider, IVsBrowseObject browseObject, IExtenderSite site, int cookie)
     {
       if (serviceProvider == null)
       {
@@ -112,7 +112,7 @@ namespace Efficio
       _site = site;
     }
 
-    ~ProjectItemExtender()
+    ~ProjectItemExtention()
     {
       try
       {

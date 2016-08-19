@@ -15,10 +15,7 @@ namespace Efficio
 
   // Auto-load the package for C# projects
   [ProvideAutoLoad(VSConstants.UICONTEXT.CSharpProject_string)]
-
-  // Auto-load the package for VB.NET projects
-  //[ProvideAutoLoad(VSConstants.UICONTEXT.VBProject_string)]
-
+  
   // Ensure VS experimental hive can find the extension library.
   [ProvideBindingPath]
   public sealed class EfficioPackage : Package
@@ -32,8 +29,8 @@ namespace Efficio
     {
       base.Initialize();
 
-      _extenders.Push(ProjectItemExtender.Register(this, PrjBrowseObjectCATID.prjCATIDCSharpFileBrowseObject));
-      _extenders.Push(ProjectItemExtender.Register(this, PrjBrowseObjectCATID.prjCATIDVBFileBrowseObject));
+      _extenders.Push(ProjectItemExtention.Register(this, PrjBrowseObjectCATID.prjCATIDCSharpFileBrowseObject));
+      _extenders.Push(ProjectItemExtention.Register(this, PrjBrowseObjectCATID.prjCATIDVBFileBrowseObject));
     }
 
     protected override void Dispose(bool disposing)

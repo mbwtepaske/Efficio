@@ -63,6 +63,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Rx-Core.2.2.5\lib\net45\System.Reactive.Core.dll</HintPath>
@@ -94,15 +95,15 @@
     <Compile Include="BaseCodeGeneratorWithSite.cs" />
     <Compile Include="CodeGeneratorRegistrationAttribute.cs" />
     <Compile Include="CustomTool.cs" />
-    <Compile Include="CustomToolParameter.cs" />
-    <Compile Include="CustomToolParameters.cs" />
-    <Compile Include="CustomToolTemplateEditor.cs" />
+    <None Include="CustomToolParameter.cs" />
+    <None Include="CustomToolParameters.cs" />
+    <Compile Include="ScriptFileNameEditor.cs" />
     <Compile Include="EfficioPackage.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\ServiceProviderExtensions.cs" />
     <Compile Include="Helper.cs" />
-    <Compile Include="ProjectItemExtender.Provider.cs" />
-    <Compile Include="ProjectItemExtender.cs" />
+    <Compile Include="ProjectItemExtention.Provider.cs" />
+    <Compile Include="ProjectItemExtention.cs" />
     <Compile Include="ProjectItemMetadata.cs" />
     <Compile Include="ProjectItemProperty.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
