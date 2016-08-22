@@ -12,11 +12,74 @@ namespace Efficio
   ///   [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\VisualStudio\%Visual Studio Version%\Generators\%Generator GUID%\%Generator Name%]
   ///		"CLSID"="{AAAA53CC-3D4F-40a2-BD4D-4F3419755476}"
   ///   "GeneratesDesignTimeSource" = d'1'
-  /// 
   /// </summary>
   [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
   public sealed class CodeGeneratorRegistrationAttribute : RegistrationAttribute
   {
+    /// <summary>
+    /// Get the Guid representing the project type
+    /// </summary>
+    public string ContextGuid
+    {
+      get;
+    }
+
+    /// <summary>
+    /// Get or Set the GeneratesDesignTimeSource value
+    /// </summary>
+    public bool GeneratesDesignTimeSource
+    {
+      get;
+      set;
+    } = false;
+
+    /// <summary>
+    /// Get or Set the GeneratesSharedDesignTimeSource value
+    /// </summary>
+    public bool GeneratesSharedDesignTimeSource
+    {
+      get;
+      set;
+    } = false;
+
+    /// <summary>
+    /// Get the Guid representing the generator type
+    /// </summary>
+    public Guid GeneratorGuid
+    {
+      get;
+    }
+
+    /// <summary>
+    /// Property that gets the generator base key name
+    /// </summary>
+    private string GeneratorRegKey => $"Generators\\{ContextGuid}\\{GeneratorRegKeyName}";
+
+    /// <summary>
+    /// Gets the Generator reg key name under 
+    /// </summary>
+    public string GeneratorRegKeyName
+    {
+      get;
+      set;
+    }
+
+    /// <summary>
+    /// Gets the Generator name 
+    /// </summary>
+    public string GeneratorName
+    {
+      get;
+    }
+
+    /// <summary>
+    /// Get the generator Type
+    /// </summary>
+    public Type GeneratorType
+    {
+      get;
+    }
+
     /// <summary>
     /// Creates a new CodeGeneratorRegistrationAttribute attribute to register a custom code generator for the provided context. 
     /// </summary>
@@ -41,81 +104,16 @@ namespace Efficio
       }
 
       ContextGuid = contextGuid;
-      GeneratorType = generatorType;
-      GeneratorName = generatorName;
-      GeneratorRegKeyName = generatorType.Name;
       GeneratorGuid = generatorType.GUID;
+      GeneratorRegKeyName = generatorType.Name;
+      GeneratorName = generatorName;
+      GeneratorType = generatorType;
     }
 
     /// <summary>
-    /// Get the generator Type
-    /// </summary>
-    public Type GeneratorType
-    {
-      get;
-    }
-
-    /// <summary>
-    /// Get the Guid representing the project type
-    /// </summary>
-    public string ContextGuid
-    {
-      get;
-    }
-
-    /// <summary>
-    /// Get the Guid representing the generator type
-    /// </summary>
-    public Guid GeneratorGuid
-    {
-      get;
-    }
-
-    /// <summary>
-    /// Get or Set the GeneratesDesignTimeSource value
-    /// </summary>
-    public bool GeneratesDesignTimeSource
-    {
-      get;
-      set;
-    } = false;
-
-    /// <summary>
-    /// Get or Set the GeneratesSharedDesignTimeSource value
-    /// </summary>
-    public bool GeneratesSharedDesignTimeSource
-    {
-      get;
-      set;
-    } = false;
-
-
-    /// <summary>
-    /// Gets the Generator name 
-    /// </summary>
-    public string GeneratorName
-    {
-      get;
-    }
-
-    /// <summary>
-    /// Gets the Generator reg key name under 
-    /// </summary>
-    public string GeneratorRegKeyName
-    {
-      get;
-      set;
-    }
-
-    /// <summary>
-    /// Property that gets the generator base key name
-    /// </summary>
-    private string GeneratorRegKey => string.Format(CultureInfo.InvariantCulture, @"Generators\{0}\{1}", ContextGuid, GeneratorRegKeyName);
-
-    /// <summary>
-    ///     Called to register this attribute with the given context.  The context
-    ///     contains the location where the registration inforomation should be placed.
-    ///     It also contains other information such as the type being registered and path information.
+    /// Called to register this attribute with the given context.  The context
+    /// contains the location where the registration inforomation should be placed.
+    /// It also contains other information such as the type being registered and path information.
     /// </summary>
     public override void Register(RegistrationContext context)
     {
@@ -139,7 +137,6 @@ namespace Efficio
     /// <summary>
     /// Unregister this file extension.
     /// </summary>
-    /// <param name="context"></param>
     public override void Unregister(RegistrationContext context) => context.RemoveKey(GeneratorRegKey);
   }
 }

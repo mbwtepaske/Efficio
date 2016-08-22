@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest
   xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011"
   xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011"
@@ -17,6 +16,8 @@
     <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.6,)" />
   </Dependencies>
   <Assets>
-    <Asset Type="Microsoft.VisualStudio.VsPackage" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" d:Source="Project" d:ProjectName="%CurrentProject%" />
+    <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="Efficio.VisualStudio" Path="|Efficio.VisualStudio|" AssemblyName="|Efficio.VisualStudio;AssemblyName|" />
+    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" Path="|Efficio.VisualStudio;PkgdefProjectOutputGroup|" />
+    <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="Efficio.VisualStudio" Path="|Efficio.VisualStudio|" />
   </Assets>
 </PackageManifest>

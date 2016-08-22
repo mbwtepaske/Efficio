@@ -17,7 +17,7 @@ namespace Efficio
   /// Adds "Custom Tool Script" and "Custom Tool Parameters" properties to the C# and VB.NET project item properties.
   /// </summary>
   [ComVisible(true)]
-  public partial class ProjectItemExtention
+  public partial class ProjectItemExtension
   {
     private readonly int _cookie;
     private readonly ProjectItem _projectItem;
@@ -26,11 +26,11 @@ namespace Efficio
     private readonly IExtenderSite _site;
 
     /// <summary>
-    /// Gets or sets the file extenderName of the template used by the <see cref="CustomTool"/>.
+    /// Gets or sets the file extenderName of the template used by the <see cref="EfficioGenerator"/>.
     /// </summary>
     [Category(EfficioPackage.Name)]
-    [DisplayName(CustomTool.Name + " " + ProjectItemMetadata.Script)]
-    [Description("An optional C# Script is executed by the " + CustomTool.Name + "(Custom Tool) instead of the input-file itself.")]
+    [DisplayName(EfficioGenerator.Name + " " + ProjectItemMetadata.Script)]
+    [Description("An optional C# Script is executed by the " + EfficioGenerator.Name + "(Custom Tool) instead of the input-file itself.")]
     [Editor(typeof(ScriptFileNameEditor), typeof(UITypeEditor))]
     public string Script
     {
@@ -53,9 +53,9 @@ namespace Efficio
         if (!string.IsNullOrWhiteSpace(value))
         {
           // Report an error if the user tries to specify template for an incompatible custom tool.
-          if (!string.IsNullOrWhiteSpace(customToolValue) && customToolValue != CustomTool.Name)
+          if (!string.IsNullOrWhiteSpace(customToolValue) && customToolValue != EfficioGenerator.Name)
           {
-            throw new InvalidOperationException($"The '{ProjectItemProperty.CustomTool}' property is supported only by the '{CustomTool.Name}'-Custom Tool. Set the 'Custom Tool' property first.");
+            throw new InvalidOperationException($"The '{ProjectItemProperty.CustomTool}' property is supported only by the '{EfficioGenerator.Name}'-Custom Tool. Set the 'Custom Tool' property first.");
           }
         }
 
@@ -64,14 +64,14 @@ namespace Efficio
         // If the file does not have a custom tool yet, assume that by specifying the template user wants to use the T4Toolbox.TemplatedFileGenerator.
         if (!string.IsNullOrWhiteSpace(value) && string.IsNullOrWhiteSpace(customToolValue))
         {
-          _projectItem.Properties.Item(ProjectItemProperty.CustomTool).Value = CustomTool.Name;
+          _projectItem.Properties.Item(ProjectItemProperty.CustomTool).Value = EfficioGenerator.Name;
         }
       }
     }
 
     //[Category(EfficioPackage.Name)]
-    //[DisplayName(CustomTool.Name + " " + ProjectItemMetadata.References)]
-    //[Description("References used by the " + CustomTool.Name + "(Custom Tool) to execute code.")]
+    //[DisplayName(EfficioGenerator.Name + " " + ProjectItemMetadata.References)]
+    //[Description("References used by the " + EfficioGenerator.Name + "(Custom Tool) to execute code.")]
     //public string[] References
     //{
     //  get
@@ -83,7 +83,7 @@ namespace Efficio
     //  }
     //}
 
-    internal ProjectItemExtention(IServiceProvider serviceProvider, IVsBrowseObject browseObject, IExtenderSite site, int cookie)
+    internal ProjectItemExtension(IServiceProvider serviceProvider, IVsBrowseObject browseObject, IExtenderSite site, int cookie)
     {
       if (serviceProvider == null)
       {
@@ -112,7 +112,7 @@ namespace Efficio
       _site = site;
     }
 
-    ~ProjectItemExtention()
+    ~ProjectItemExtension()
     {
       try
       {

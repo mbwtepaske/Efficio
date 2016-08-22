@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
@@ -10,49 +11,55 @@ using Microsoft.CodeAnalysis.Scripting;
 
 namespace Efficio
 {
-  public class Script<TContent> : IDisposable 
-    where TContent : class
+  public class Script : IDisposable 
   {
-    public static async Task<ScriptResult> EvaluateAsync(string scriptCode, string scriptPath = null, TContent content = null)
+    public static async Task<ScriptResult> EvaluateAsync(string scriptCode, string scriptPath = null, string content = null, CancellationToken cancellationToken = default(CancellationToken))
     {
       var scriptOptions = ScriptOptions.Default
         .WithFilePath(scriptPath)
         .WithReferences(typeof(Script).Assembly)
         .WithImports(typeof(Script).Namespace);
 
-      using (var script = new Script<TContent>(content))
+      using (var script = new Script(content))
       {
-        var scriptResult = new ScriptResult();
-
         try
         {
-          await CSharpScript.EvaluateAsync(scriptCode ?? String.Empty, scriptOptions, script);
-        }
-        catch (AggregateException)
-        {
+          await CSharpScript.EvaluateAsync(scriptCode ?? String.Empty, scriptOptions, script, script.GetType(), cancellationToken);
         }
         catch (CompilationErrorException exception)
         {
+          var errorList = new List<ScriptError>();
+
+          foreach (var diagnostic in exception.Diagnostics)
+          {
+            var position = diagnostic.Location.GetLineSpan().StartLinePosition;
+            
+            errorList.Add(new ScriptError(position.Line, position.Character, diagnostic.GetMessage()));
+          }
           
+          return new ScriptResult(errorList.ToArray());
         }
 
-        return scriptResult;
+        return new ScriptResult(script.Output.ToArray());
       }
     }
 
-    public TContent Content
+    public string Content
     {
       get;
       set;
     }
 
-    private Script(TContent content = null)
+    public ScriptOutputCollection Output
     {
-      Content = content;
+      get;
+    } = new ScriptOutputCollection();
+
+    public Script(string content)
+    {
+      Content = content ?? String.Empty;
     }
 
-    public void Dispose()
-    {
-    }
+    public void Dispose() => Output.Dispose();
   }
 }

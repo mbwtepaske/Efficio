@@ -13,7 +13,7 @@ namespace Efficio
   /// <summary>
   /// Adds "Custom Tool Script" and "Custom Tool Parameters" properties to the C# and VB.NET project item properties.
   /// </summary>
-  public partial class ProjectItemExtention
+  public partial class ProjectItemExtension
   {
     private class Provider : IExtenderProvider
     {
@@ -30,7 +30,7 @@ namespace Efficio
         => category == _category && extenderName == EfficioPackage.Name;
 
       public object GetExtender(string categoryID, string name, object extendee, IExtenderSite extenderSite, int cookie) 
-        => new ProjectItemExtention(_serviceProvider, (IVsBrowseObject) extendee, extenderSite, cookie);
+        => new ProjectItemExtension(_serviceProvider, (IVsBrowseObject) extendee, extenderSite, cookie);
     }
 
     public static IDisposable Register(IServiceProvider serviceProvider, string category)

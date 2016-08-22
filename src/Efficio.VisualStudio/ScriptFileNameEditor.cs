@@ -89,7 +89,7 @@ namespace Efficio
         Title = "Select C# Script"
       };
       
-      return dialog.ShowDialog().GetValueOrDefault() ? GetRelativePath(projectDirectoryName, fileName) : value;
+      return dialog.ShowDialog().GetValueOrDefault() ? GetRelativePath(projectDirectoryName, dialog.FileName) : value;
     }
 
     /// <summary>

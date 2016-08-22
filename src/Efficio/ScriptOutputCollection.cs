@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Efficio
 {
-  public class ScriptOutputCollection : ScriptOutput
+  public class ScriptOutputCollection : ScriptOutput, IEnumerable<ScriptOutput>
   {
     private class ScriptOutputItem : ScriptOutput
     {
@@ -18,7 +20,7 @@ namespace Efficio
       }
     }
     
-    private readonly HashSet<ScriptOutput> _items = new HashSet<ScriptOutput>();
+    private readonly Dictionary<string, ScriptOutput> _items = new Dictionary<string, ScriptOutput>(StringComparer.OrdinalIgnoreCase);
 
     public ScriptOutput this[string filePath]
     {
@@ -28,13 +30,28 @@ namespace Efficio
         {
           return this;
         }
+
+        var scriptOutput = default(ScriptOutput);
+
+        if (!_items.TryGetValue(filePath, out scriptOutput))
+        {
+          _items[filePath] = scriptOutput = new ScriptOutputItem(this, filePath);
+        }
         
-        return new ScriptOutputItem(this, filePath);
+        return scriptOutput;
+      }
+    }
+    
+    public IEnumerator<ScriptOutput> GetEnumerator()
+    {
+      yield return this;
+
+      foreach (var scriptOutput in _items.Values)
+      {
+        yield return scriptOutput;
       }
     }
 
-    public ScriptOutputCollection()
-    {
-    }
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
   }
 }

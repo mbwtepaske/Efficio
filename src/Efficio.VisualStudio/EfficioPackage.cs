@@ -21,7 +21,7 @@ namespace Efficio
   public sealed class EfficioPackage : Package
   {
     public const string Description = "The EfficioPackage extension extends C# and VB.NET project items with addition properties and a new custom tool '" + Name + "'.";
-    public const string Name = "EfficioPackage";
+    public const string Name = "Efficio";
 
     private readonly Stack<IDisposable> _extenders = new Stack<IDisposable>();
 
@@ -29,10 +29,10 @@ namespace Efficio
     {
       base.Initialize();
 
-      _extenders.Push(ProjectItemExtention.Register(this, PrjBrowseObjectCATID.prjCATIDCSharpFileBrowseObject));
-      _extenders.Push(ProjectItemExtention.Register(this, PrjBrowseObjectCATID.prjCATIDVBFileBrowseObject));
+      _extenders.Push(ProjectItemExtension.Register(this, PrjBrowseObjectCATID.prjCATIDCSharpFileBrowseObject));
+      _extenders.Push(ProjectItemExtension.Register(this, PrjBrowseObjectCATID.prjCATIDVBFileBrowseObject));
     }
-
+    
     protected override void Dispose(bool disposing)
     {
       while (_extenders.Count > 0)

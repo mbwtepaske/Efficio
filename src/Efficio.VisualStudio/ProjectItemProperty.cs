@@ -13,7 +13,7 @@ namespace Efficio
     /// <summary>
     /// Internal name of the "Custom Tool" project item property.
     /// </summary>
-    public const string CustomTool = "CustomTool";
+    public const string CustomTool = "EfficioGenerator";
 
     /// <summary>
     /// Internal name of the "Custom Tool Namespace" project item property.

@@ -94,7 +94,7 @@
     <Compile Include="BaseCodeGenerator.cs" />
     <Compile Include="BaseCodeGeneratorWithSite.cs" />
     <Compile Include="CodeGeneratorRegistrationAttribute.cs" />
-    <Compile Include="CustomTool.cs" />
+    <Compile Include="EfficioGenerator.cs" />
     <None Include="CustomToolParameter.cs" />
     <None Include="CustomToolParameters.cs" />
     <Compile Include="ScriptFileNameEditor.cs" />
@@ -103,7 +103,7 @@
     <Compile Include="Extensions\ServiceProviderExtensions.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="ProjectItemExtention.Provider.cs" />
-    <Compile Include="ProjectItemExtention.cs" />
+    <Compile Include="ProjectItemExtension.cs" />
     <Compile Include="ProjectItemMetadata.cs" />
     <Compile Include="ProjectItemProperty.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -147,21 +147,4 @@
     <Copy Condition="Exists($(VSIXOutputPath))" SourceFiles="@(ProjectOutput)" DestinationFolder="$(VSIXOutputPath)" />
     <Message Importance="High" Text="$(VSIXOutputPath)" />
   </Target>
-  <!-- 
-  <Target Name="InstallPlugin" DependsOnTargets="Build">
-    <Copy SkipUnchangedFiles="true" ContinueOnError="true" SourceFiles="$(OutputPath)source.extension.vsixmanifest" DestinationFiles="$(DevEnvDir)\Extensions\$(AssemblyName)\extension.vsixmanifest" />
-  </Target> 
-  
-  <Target Name="AfterBuild">
-    <Message Text="MsBuildProjectDirectory = '$(MsBuildProjectDirectory)'" />
-    <PropertyGroup>
-      <VsixOut>$(MsBuildProjectDirectory)\..\artifacts</VsixOut>
-    </PropertyGroup>
-    <ItemGroup>
-      <FilesToCopy Include="$(OutputPath)\*.vsix" />
-    </ItemGroup>
-    <MakeDir Condition=" !Exists('$(VsixOut)') " Directories="$(VsixOut)" />
-    <Error Condition="!Exists($(VsSdkTargets))" Text="$(VsSdkTargets) could not be found. A VSIX cannot be built." />
-  </Target>  
-   -->
 </Project>
