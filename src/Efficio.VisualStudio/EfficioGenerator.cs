@@ -2,8 +2,12 @@
 using System.IO;
 using System.Runtime.InteropServices;
 
+using EnvDTE;
+
 using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Efficio
 {
@@ -13,59 +17,30 @@ namespace Efficio
   [ProvideObject(typeof(EfficioGenerator))]
   public sealed class EfficioGenerator : BaseCodeGeneratorWithSite
   {
+    private static readonly byte[] Empty = Array.Empty<byte>();
     internal const string Description = "Efficio Generator";
     internal const string Name = "Efficio";
-    
+
     protected override byte[] GenerateCode(string content)
     {
-      //var projectItemExtender = GetProjectItem().Extender[EfficioPackage.Name] as ProjectItemExtension;
+      var projectItem = GetProjectItem();
+      var scriptFilePath = projectItem.Properties.ItemOrNull($"{EfficioPackage.Name}.{ProjectItemMetadata.Script}")?.Value.ToString() ?? string.Empty;
 
-      //if (projectItemExtender != null)
+      if (!String.IsNullOrWhiteSpace(scriptFilePath) && !Path.IsPathRooted(scriptFilePath))
       {
-        var scriptFile = GetProjectItem().Properties.Item(ProjectItemMetadata.Script).Value.ToString() ?? String.Empty;// projectItemExtender.Script;
+        scriptFilePath = Path.Combine(Helper.GetProjectFolder(projectItem.ContainingProject), scriptFilePath);
+      }
 
-        if (File.Exists(scriptFile))
-        {
-          var scriptCode = File.ReadAllText(scriptFile);
-          var scriptResult = Script.EvaluateAsync(scriptCode, scriptFile, content).Result;
+      var scriptResult = File.Exists(scriptFilePath)
+        ? Script.EvaluateAsync(File.ReadAllText(scriptFilePath), scriptFilePath, content).Result
+        : Script.EvaluateAsync(content, projectItem.Properties.Item("FullPath").Value.ToString()).Result;
 
-          foreach (var error in scriptResult.Errors)
-          {
-            GeneratorError(0, error.Message, (uint) error.Line, (uint) error.Column);
-          }
-        }
+      foreach (var error in scriptResult.Errors)
+      {
+        GeneratorError(0, error.Message, (uint) error.Line, (uint) error.Column);
       }
 
       return null;
     }
-
-    //private byte[] GenerateFromAssociatedTemplateFile(string content)
-    //{
-    //  var hierarchy = SiteServiceProvider.GetService<IVsHierarchy>();
-    //  uint inputItemId;
-    //
-    //  ErrorHandler.ThrowOnFailure(hierarchy.ParseCanonicalName(content, out inputItemId));
-    //
-    //  var templatePath = default(string);
-    //  var propertyStorage = SiteServiceProvider.GetService< IVsBuildPropertyStorage>();
-    //  
-    //  if (ErrorHandler.Failed(propertyStorage.GetItemAttribute(inputItemId, ProjectItemMetadata.Template, out templatePath)))
-    //  {
-    //    return null;
-    //  }
-    //
-    //  // Remove <Template> metadata from the project item and refresh the properties window
-    //  ErrorHandler.ThrowOnFailure(propertyStorage.SetItemAttribute(inputItemId, ProjectItemMetadata.Template, null));
-    //
-    //  var propertyBrowser = (IVSMDPropertyBrowser) GlobalServiceProvider.GetService(typeof(SVSMDPropertyBrowser));
-    //
-    //  propertyBrowser.Refresh();
-    //
-    //  var templateLocator = (TemplateLocator) GlobalServiceProvider.GetService(typeof(TemplateLocator));
-    //
-    //  return templateLocator.LocateTemplate(content, ref templatePath)
-    //    ? File.ReadAllBytes(templatePath)
-    //    : null;
-    //}
   }
 }

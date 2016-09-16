@@ -29,7 +29,7 @@ namespace Efficio
   /// </summary>
   public abstract class BaseCodeGeneratorWithSite : BaseCodeGenerator, VSOLE.IObjectWithSite
   {
-    private CodeDomProvider codeDomProvider;
+    private CodeDomProvider _codeDomProvider;
 
     #region IObjectWithSite Members
 
@@ -55,7 +55,7 @@ namespace Efficio
     void VSOLE.IObjectWithSite.SetSite(object site)
     {
       Site = site;
-      codeDomProvider = null;
+      _codeDomProvider = null;
       _serviceProvider = null;
     }
 
@@ -66,20 +66,8 @@ namespace Efficio
     /// <summary>
     /// Gets the ServiceProvider
     /// </summary>
-    private ServiceProvider ServiceProvider => _serviceProvider ?? (_serviceProvider = new ServiceProvider(Site as VSOLE.IServiceProvider));
-
-    /// <summary>
-    /// Method to get a service by its GUID
-    /// </summary>
-    protected object GetService(Guid serviceGuid) => ServiceProvider.GetService(serviceGuid);
-
-    /// <summary>
-    /// Method to get a service by its Type
-    /// </summary>
-    /// <param name="serviceType">Type of service to retrieve</param>
-    /// <returns>An object that implements the requested service</returns>
-    protected object GetService(Type serviceType) => ServiceProvider.GetService(serviceType);
-
+    protected ServiceProvider ServiceProvider => _serviceProvider ?? (_serviceProvider = new ServiceProvider(Site as VSOLE.IServiceProvider));
+    
     /// <summary>
     /// Returns a CodeDomProvider object for the language of the project containing
     /// the project item the generator was called on
@@ -87,23 +75,23 @@ namespace Efficio
     /// <returns>A CodeDomProvider object</returns>
     protected virtual CodeDomProvider GetCodeProvider()
     {
-      if (codeDomProvider == null)
+      if (_codeDomProvider == null)
       {
         //Query for IVSMDCodeDomProvider/SVSMDCodeDomProvider for this project type
-        var provider = GetService(typeof(SVSMDCodeDomProvider)) as IVSMDCodeDomProvider;
+        var provider = ServiceProvider.GetService<SVSMDCodeDomProvider, IVSMDCodeDomProvider>();
 
         if (provider != null)
         {
-          codeDomProvider = provider.CodeDomProvider as CodeDomProvider;
+          _codeDomProvider = provider.CodeDomProvider as CodeDomProvider;
         }
         else
         {
           //In the case where no language specific CodeDom is available, fall back to C#
-          codeDomProvider = CodeDomProvider.CreateProvider("C#");
+          _codeDomProvider = CodeDomProvider.CreateProvider("C#");
         }
       }
 
-      return codeDomProvider;
+      return _codeDomProvider;
     }
 
     /// <summary>
@@ -130,6 +118,6 @@ namespace Efficio
     /// <summary>
     /// Returns the EnvDTE.ProjectItem object that corresponds to the project item the code generator was called on.
     /// </summary>
-    protected ProjectItem GetProjectItem() => (ProjectItem) GetService(typeof(ProjectItem));
+    protected ProjectItem GetProjectItem() => ServiceProvider.GetService<ProjectItem>();
   }
 }

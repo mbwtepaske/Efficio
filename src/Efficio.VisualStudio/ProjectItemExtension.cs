@@ -11,6 +11,8 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 using EnvDTE;
 
+using VSLangProj;
+
 namespace Efficio
 {
   /// <summary>

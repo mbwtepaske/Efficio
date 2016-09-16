@@ -21,6 +21,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".git", ".git", "{2A77D9BA-7
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Efficio.VSIX", "Efficio.VSIX\Efficio.VSIX.csproj", "{CAB9FD86-0048-4DF2-95F6-F46EE50C8B32}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{ABDE8150-31BB-4450-92A8-E04F9069242F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Efficio.Test", "Testing\Efficio.Test\Efficio.Test.csproj", "{CAAD5F5A-437F-4741-9198-9615EF77398B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,8 +43,15 @@ Global
 		{CAB9FD86-0048-4DF2-95F6-F46EE50C8B32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAB9FD86-0048-4DF2-95F6-F46EE50C8B32}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CAB9FD86-0048-4DF2-95F6-F46EE50C8B32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAAD5F5A-437F-4741-9198-9615EF77398B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAAD5F5A-437F-4741-9198-9615EF77398B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAAD5F5A-437F-4741-9198-9615EF77398B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAAD5F5A-437F-4741-9198-9615EF77398B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CAAD5F5A-437F-4741-9198-9615EF77398B} = {ABDE8150-31BB-4450-92A8-E04F9069242F}
 	EndGlobalSection
 EndGlobal

@@ -53,19 +53,18 @@ namespace Efficio
     /// <summary>
     /// Property that gets the generator base key name
     /// </summary>
-    private string GeneratorRegKey => $"Generators\\{ContextGuid}\\{GeneratorRegKeyName}";
+    private string GeneratorRegistryKey => $"Generators\\{ContextGuid}\\{GeneratorRegistryKeyName}";
 
     /// <summary>
-    /// Gets the Generator reg key name under 
+    /// Gets the generator registry keyname.
     /// </summary>
-    public string GeneratorRegKeyName
+    public string GeneratorRegistryKeyName
     {
       get;
-      set;
     }
 
     /// <summary>
-    /// Gets the Generator name 
+    /// Gets the generator's name.
     /// </summary>
     public string GeneratorName
     {
@@ -73,7 +72,7 @@ namespace Efficio
     }
 
     /// <summary>
-    /// Get the generator Type
+    /// Get the generator's type.
     /// </summary>
     public Type GeneratorType
     {
@@ -105,7 +104,7 @@ namespace Efficio
 
       ContextGuid = contextGuid;
       GeneratorGuid = generatorType.GUID;
-      GeneratorRegKeyName = generatorType.Name;
+      GeneratorRegistryKeyName = generatorName;
       GeneratorName = generatorName;
       GeneratorType = generatorType;
     }
@@ -117,7 +116,7 @@ namespace Efficio
     /// </summary>
     public override void Register(RegistrationContext context)
     {
-      using (var childKey = context.CreateKey(GeneratorRegKey))
+      using (var childKey = context.CreateKey(GeneratorRegistryKey))
       {
         childKey.SetValue(string.Empty, GeneratorName);
         childKey.SetValue("CLSID", GeneratorGuid.ToString("B"));
@@ -137,6 +136,6 @@ namespace Efficio
     /// <summary>
     /// Unregister this file extension.
     /// </summary>
-    public override void Unregister(RegistrationContext context) => context.RemoveKey(GeneratorRegKey);
+    public override void Unregister(RegistrationContext context) => context.RemoveKey(GeneratorRegistryKey);
   }
 }
